@@ -2,6 +2,8 @@ package com.stars.smartattendancemonitor.service;
 
 import com.stars.smartattendancemonitor.repository.AttendanceRepository;
 
+import java.util.List;
+
 import com.stars.smartattendancemonitor.models.Attendance;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,5 +17,10 @@ public class AttendanceServiceImpl implements AttendanceService{
     @Override
     public void save(Object attendance) {
         attendanceRepository.save((Attendance) attendance);
+    }
+
+    @Override
+    public List<Attendance> getAttendanceFromSelectedDate(java.sql.Date date) {
+        return attendanceRepository.getByDate(date);
     }
 }

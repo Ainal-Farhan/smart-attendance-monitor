@@ -49,7 +49,7 @@
     <link rel="stylesheet" th:href="@{/css/calendar/fullcalendar.print.min.css}">
     <!-- style CSS
 		============================================ -->
-    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{style.css}">
     <!-- responsive CSS
 		============================================ -->
     <link rel="stylesheet" th:href="@{/css/responsive.css}">
@@ -59,6 +59,52 @@
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 <body>
+    <script>
+        var getJSON = function(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'json';
+            xhr.onload = function() {
+            var status = xhr.status;
+            if (status === 200) {
+                callback(null, xhr.response);
+            } else {
+                callback(status, xhr.response);
+            }
+            };
+            xhr.send();
+        };
+
+        fetchlast30DaysAttendance().then(data => {
+            console.table(data);
+        });
+
+        getJSON('http://localhost:8080/api/attendance/last30days',
+            function(err, data) {
+                if (err !== null) {
+                    alert('Something went wrong: ' + err);
+                } else {
+                    console.table(data);
+                }
+            }
+        );
+
+        async function fetchlast30DaysAttendance() {
+            const response = await fetch('http://localhost:8080/api/attendance/last30days');
+            const attendance = await response.json();
+            return attendance;
+        }
+
+        // The Way to use getJSON
+        // getJSON('http://localhost:8080/getDataLink',
+        // function(err, data) {
+        //   if (err !== null) {
+        //     alert('Something went wrong: ' + err);
+        //   } else {
+        //     alert('Your query count: ' + data.query.count);
+        //   }
+        // });
+    </script>
     <div class="left-sidebar-pro">
         <nav id="sidebar" class="">
             <div class="sidebar-header">
@@ -252,13 +298,13 @@
                             </div>
                             <ul class="list-inline cus-product-sl-rp">
                                 <li>
-                                    <h5><i class="fa fa-circle" style="color: #24caa1;"></i>Bags</h5>
+                                    <h5><i class="fa fa-circle" style="color: #edfb46;"></i>Low</h5>
                                 </li>
                                 <li>
-                                    <h5><i class="fa fa-circle" style="color: #00b5c2;"></i>Shoes</h5>
+                                    <h5><i class="fa fa-circle" style="color: #52973a;"></i>Normal</h5>
                                 </li>
                                 <li>
-                                    <h5><i class="fa fa-circle" style="color: #ff7f5a;"></i>Jewelery</h5>
+                                    <h5><i class="fa fa-circle" style="color: #ff0000;"></i>High</h5>
                                 </li>
                             </ul>
                             <div id="morris-area-chart" style="height: 356px;"></div>
