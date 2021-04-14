@@ -105,7 +105,7 @@ function initAttendanceStatusGraph() {
         var gStatusData = attStatusGraphData(data);
         console.table(gStatusData);
 
-        const labelsStatus = ['Low', 'Normal', 'High'];
+        const labelsStatus = ['High', 'Normal', 'Low'];
         attStatusGraph = setMorisAreaChart(
             'morris-area-chart', 
             gStatusData, 
@@ -144,9 +144,9 @@ function refreshAttendanceStatusGraph() {
         
         attStatusGraph.setData([{
             "date" : "",
-            "Low"  : 0,
-            "Normal"  : 0,
             "High"  : 0,
+            "Normal"  : 0,
+            "Low"  : 0,
         }]);
         
         var gData = attStatusGraphData(data);
