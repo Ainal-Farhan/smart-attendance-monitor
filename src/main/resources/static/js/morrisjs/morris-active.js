@@ -39,8 +39,8 @@ function attStatusGraphData(data) {
 
         const dataEach = {
             "date"   : date,
-            "High"    : attH,
-            "Normal" : attN,
+            "Normal"    : attN,
+            "High" : attH,
             "Low"   : attL
         };
         gData.push(dataEach);
@@ -105,7 +105,7 @@ function initAttendanceStatusGraph() {
         var gStatusData = attStatusGraphData(data);
         console.table(gStatusData);
 
-        const labelsStatus = ['High', 'Normal', 'Low'];
+        const labelsStatus = ['Normal', 'High', 'Low'];
         attStatusGraph = setMorisAreaChart(
             'morris-area-chart', 
             gStatusData, 
@@ -114,12 +114,12 @@ function initAttendanceStatusGraph() {
             labelsStatus,
             0,
             0.8,
-            ['red', 'green','yellow'],
+            ['green', 'red','yellow'],
             true,
             '#e0e0e0',
             0,
             'auto',
-            ['red', 'green','yellow'],
+            ['green', 'red','yellow'],
             true
         );
     });
@@ -144,8 +144,8 @@ function refreshAttendanceStatusGraph() {
         
         attStatusGraph.setData([{
             "date" : "",
-            "High"  : 0,
             "Normal"  : 0,
+            "High"  : 0,
             "Low"  : 0,
         }]);
         
