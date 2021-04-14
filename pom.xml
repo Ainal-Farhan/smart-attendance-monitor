@@ -11,7 +11,7 @@
 	<groupId>com.stars</groupId>
 	<artifactId>smart-attendance-monitor</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>smart-attendance-monitor</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
