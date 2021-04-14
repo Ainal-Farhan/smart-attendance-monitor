@@ -14,6 +14,6 @@ import org.springframework.stereotype.Repository;
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     
     @Modifying
-    @Query("SELECT a FROM Attendance a WHERE a.date >= :date ORDER BY a.date ASC")
-    public List<Attendance> getByDate(@Param("date") java.sql.Date date);
+    @Query("SELECT a FROM Attendance a WHERE a.date >= :date AND a.date < :currDate ORDER BY a.date ASC")
+    public List<Attendance> getByDate(@Param("date") java.sql.Date date, @Param("currDate") java.sql.Date currDate);
 }

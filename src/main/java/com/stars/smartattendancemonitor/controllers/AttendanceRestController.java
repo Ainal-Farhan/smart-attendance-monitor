@@ -21,11 +21,14 @@ public class AttendanceRestController {
     @GetMapping("/api/attendance/selectedDate")
     public List<Attendance> getAttendanceFromSelectedDate(@RequestParam("d") String d) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date date = sdf.parse(d);
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
-            return attendanceService.getAttendanceFromSelectedDate(sqlDate);
+            java.util.Date now = new java.util.Date();
+            java.sql.Date currSqlDate = new java.sql.Date(now.getTime());
+
+            return attendanceService.getAttendanceFromSelectedDate(sqlDate, currSqlDate);
         }
         catch(ParseException e) {
             System.out.println(e);
@@ -39,6 +42,9 @@ public class AttendanceRestController {
         java.util.Date last30DaysDate = new java.util.Date(date.getTime() - 30 * 24 * 3600 * 1000l);
         java.sql.Date sqlDate = new java.sql.Date(last30DaysDate.getTime());
 
-        return attendanceService.getAttendanceFromSelectedDate(sqlDate);
+        java.util.Date now = new java.util.Date();
+        java.sql.Date currSqlDate = new java.sql.Date(now.getTime());
+        
+        return attendanceService.getAttendanceFromSelectedDate(sqlDate, currSqlDate);
     }
 }

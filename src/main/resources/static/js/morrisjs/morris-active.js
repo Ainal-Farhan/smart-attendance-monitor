@@ -1,110 +1,200 @@
-// Dashboard 1 Morris-chart
+// Dashboard Morris-chart
 
-Morris.Area({
-        element: 'morris-area-chart',
-        data: [{
-            period: '2012',
-            Low: 0,
-            Normal: 0,
-            High: 0
-        }, {
-            period: '2013',
-            Low: 130,
-            Normal: 100,
-            High: 80
-        }, {
-            period: '2014',
-            Low: 80,
-            Normal: 60,
-            High: 70
-        }, {
-            period: '2015',
-            Low: 70,
-            Normal: 200,
-            High: 160
-        }, {
-            period: '2016',
-            Low: 180,
-            Normal: 150,
-            High: 120
-        }, {
-            period: '2017',
-            Low: 105,
-            Normal: 100,
-            High: 90
-        },
-         {
-            period: '2018',
-            Low: 250,
-            Normal: 150,
-            High: 200
-        }],
-        xkey: 'period',
-        ykeys: ['Low', 'Normal', 'High'],
-        labels: ['Low', 'Normal', 'High'],
-        pointSize: 0,
-        fillOpacity: 0.6,
-        pointStrokeColors:['#edfb46', '#52973a', '#ff0000'],
-        behaveLikeLine: true,
-        gridLineColor: '#e0e0e0',
-        lineWidth:0,
-        hideHover: 'auto',
-        lineColors: ['#edfb46', '#52973a', '#ff0000'],
-        resize: true
+var attStatusGraph;
+var attLineGraph;
+
+initAttendanceStatusGraph();
+initLineGraph();
+
+function attStatusGraphData(data) {
+    const priorBy30Days = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    var j = 0;
+    var gData = [];
+    for(var i = priorBy30Days, count = 0; i <= Date.now(); i = new Date(i.getTime() + 24 * 60 * 60 * 1000), count++) {
+        const date = i.toISOString().slice(0, 10);
         
-    });
+        // L = Low, N = Normal, H = High
+        var attL = 0;
+        var attN = 0;
+        var attH = 0;
+        
+        if(i === priorBy30Days) j = 0;
 
-Morris.Area({
-        element: 'extra-area-chart',
-        data: [{
-                    period: '2012',
-                    Low: 0,
-                    Normal: 0,
-                    High: 0
-                }, {
-                    period: '2013',
-                    Low: 50,
-                    Normal: 15,
-                    High: 5
-                }, {
-                    period: '2014',
-                    Low: 20,
-                    Normal: 50,
-                    High: 65
-                }, {
-                    period: '2015',
-                    Low: 60,
-                    Normal: 12,
-                    High: 7
-                }, {
-                    period: '2016',
-                    Low: 30,
-                    Normal: 20,
-                    High: 120
-                }, {
-                    period: '2017',
-                    Low: 25,
-                    Normal: 80,
-                    High: 40
-                }, {
-                    period: '2018',
-                    Low: 10,
-                    Normal: 10,
-                    High: 10
+        for(j; j < data.length; j++) {
+            if(data[j].date === date) {
+                switch(data[j].status.toLowerCase()) {
+                    case 'low':
+                        attL++;
+                        break;
+                    case 'normal':
+                        attN++;
+                        break;
+                    case 'high':
+                        attH++;
+                        break;
                 }
+            }
+            else break;
+        }
 
+        const dataEach = {
+            "date"   : date,
+            "High"    : attH,
+            "Normal" : attN,
+            "Low"   : attL
+        };
+        gData.push(dataEach);
+    }
 
-                ],
-                lineColors: ['#edfb46', '#52973a', '#5ccf61'],
-                xkey: 'period',
-                ykeys: ['Low', 'Normal', 'High'],
-                labels: ['Low', 'Normal', 'High'],
-                pointSize: 0,
-                lineWidth: 0,
-                resize:true,
-                fillOpacity: 0.8,
-                behaveLikeLine: true,
-                gridLineColor: '#e0e0e0',
-                hideHover: 'auto'
+    return gData;
+}
+
+function attLineGraphData(data) {
+    const priorBy30Days = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    var j = 0;
+    var gData = [];
+    for(var i = priorBy30Days, count = 0; i <= Date.now(); i = new Date(i.getTime() + 24 * 60 * 60 * 1000), count++) {
+        const date = i.toISOString().slice(0, 10);
         
+        var attAll = 0;
+        
+        if(i === priorBy30Days) j = 0;
+
+        for(j; j < data.length; j++) {
+            if(data[j].date === date) {
+                attAll++;
+            }
+            else break;
+        }
+
+        const dataEach = {
+            "Date"   : date,
+            "Total Attendance"    : attAll
+        };
+        gData.push(dataEach);
+    }
+    return gData;
+}
+
+function initLineGraph() {
+    fetchlast30DaysAttendance().then(data => {
+        var gLineData = attLineGraphData(data);
+        console.table(gLineData);
+    
+        const labelsLine = ['Total Attendance'];
+        attLineGraph = setMorisLineChart(
+            'extra-area-chart',
+            gLineData,
+            ['blue'],
+            'Date',
+            labelsLine,
+            labelsLine,
+            0, 
+            1, 
+            true,
+            true,
+            '#e0e0e0',
+            true
+        );
     });
+}
+
+function initAttendanceStatusGraph() {
+    fetchlast30DaysAttendance().then(data => {
+    
+        var gStatusData = attStatusGraphData(data);
+        console.table(gStatusData);
+
+        const labelsStatus = ['Low', 'Normal', 'High'];
+        attStatusGraph = setMorisAreaChart(
+            'morris-area-chart', 
+            gStatusData, 
+            'date',
+            labelsStatus,
+            labelsStatus,
+            0,
+            0.8,
+            ['red', 'green','yellow'],
+            true,
+            '#e0e0e0',
+            0,
+            'auto',
+            ['red', 'green','yellow'],
+            true
+        );
+    });
+}
+
+function refreshLineGraph() {
+    fetchlast30DaysAttendance().then(data => {
+        
+        attLineGraph.setData([{
+            "Date" : "",
+            "Total Attendance"  : 0,
+        }]);
+        
+        var gData = attLineGraphData(data);
+    
+        attLineGraph.setData(gData);
+    });
+}
+
+function refreshAttendanceStatusGraph() {
+    fetchlast30DaysAttendance().then(data => {
+        
+        attStatusGraph.setData([{
+            "date" : "",
+            "Low"  : 0,
+            "Normal"  : 0,
+            "High"  : 0,
+        }]);
+        
+        var gData = attStatusGraphData(data);
+    
+        // console.table(gData);
+        attStatusGraph.setData(gData);
+    });
+}
+
+async function fetchlast30DaysAttendance() {
+    const response = await fetch('http://localhost:8080/api/attendance/last30days');
+    const attendance = await response.json();
+    return attendance;
+}
+
+function setMorisAreaChart(e, d, x, y, l, ps, fo, psc, bll, glc, lw, hd, ln, r) {
+    return Morris.Area({
+        element: e,
+        data: d,
+        xkey: x,
+        ykeys: y,
+        labels: l,
+        pointSize: ps,
+        fillOpacity: fo,
+        pointStrokeColors:psc,
+        behaveLikeLine: bll,
+        gridLineColor: glc,
+        lineWidth:lw,
+        hideHover: hd,
+        lineColors: ln,
+        resize: r
+    });
+}
+
+function setMorisLineChart(e, d, lc, x, y, l, ps, lw, r, bll, glc, hh) {
+    return Morris.Line({
+        element: e,
+        data: d,
+        lineColors: lc,
+        xkey: x,
+        ykeys: y,
+        labels: l,
+        pointSize: ps,
+        lineWidth: lw,
+        resize:r,
+        behaveLikeLine: bll,
+        gridLineColor: glc,
+        hideHover: hh,
+        lineWidth:1,
+    });
+}

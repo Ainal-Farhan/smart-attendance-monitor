@@ -20,15 +20,15 @@ public class AttendanceController {
     public String saveData(
         @RequestParam(name = "temp")    double temp,
         @RequestParam(name = "status")  String status,
-        @RequestParam(name = "time")    String stringTime,    // format: hh:mm:ss,    eg: 10:20:31 
-        @RequestParam(name = "date")    String stringDate     // format: yyyy-mm-dd,  eg: 2011-12-31
+        @RequestParam(name = "t")    String t,    // format: hh:mm:ss,    eg: 10:20:31 
+        @RequestParam(name = "d")    String d     // format: yyyy-mm-dd,  eg: 2011-12-31
     ) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-            java.util.Date date = sdf.parse(stringDate + " " + stringTime);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date date = sdf.parse(d);
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
-            java.sql.Time sqlTime = java.sql.Time.valueOf(stringTime);
+            java.sql.Time sqlTime = java.sql.Time.valueOf(t);
 
             Attendance attendance = new Attendance();
 
@@ -36,7 +36,7 @@ public class AttendanceController {
             attendance.setStatus(status);
             attendance.setTime(sqlTime);
             attendance.setDate(sqlDate);
-
+            
             attendanceService.save(attendance);
         }
         catch (ParseException e) {

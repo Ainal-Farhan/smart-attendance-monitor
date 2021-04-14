@@ -20,7 +20,7 @@ public class AttendanceServiceImpl implements AttendanceService{
     }
 
     @Override
-    public List<Attendance> getAttendanceFromSelectedDate(java.sql.Date date) {
-        return attendanceRepository.getByDate(date);
+    public List<Attendance> getAttendanceFromSelectedDate(java.sql.Date date, java.sql.Date currDate) {
+        return attendanceRepository.getByDate(date, currDate);
     }
 }
