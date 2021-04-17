@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.stars.smartattendancemonitor.models.Attendance;
 import com.stars.smartattendancemonitor.service.AttendanceService;
@@ -77,5 +78,48 @@ public class AttendanceRestController {
             return new Attendance();
         }
 
+    }
+
+    @GetMapping("/add/dummy-data")
+    public List<Attendance> addDummyData() {
+        List<Attendance> attendances = new ArrayList<>();
+        int day = 1;
+
+        while(day < 31) {
+            Attendance att = new Attendance();
+            int rand = new Random().nextInt(3) + 1;
+
+            java.util.Date date = new java.util.Date();
+            java.util.Date last30DaysDate = new java.util.Date(date.getTime() - day * 24 * 3600 * 1000l);
+            java.sql.Date sqlDate = new java.sql.Date(last30DaysDate.getTime());
+
+            att.setDate(sqlDate);
+            att.setTime(java.sql.Time.valueOf("00:00:00"));
+
+            switch(rand) {
+                case 1:
+                    att.setStatus("low");
+                    att.setTemperature(20.3);
+                    break;
+                case 2:
+                    att.setStatus("normal");
+                    att.setTemperature(35.3);
+                    break;
+                case 3:
+                    att.setStatus("high");
+                    att.setTemperature(40.3);
+                    break;
+            }
+
+            System.out.println(rand);
+            System.out.println(att);
+            attendances.add(att);
+
+            day++;
+        }
+
+        attendanceService.saveAll(attendances);
+
+        return attendances;
     }
 }

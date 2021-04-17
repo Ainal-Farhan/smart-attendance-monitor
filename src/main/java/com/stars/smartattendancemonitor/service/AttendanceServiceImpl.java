@@ -23,4 +23,9 @@ public class AttendanceServiceImpl implements AttendanceService{
     public List<Attendance> getAttendanceFromSelectedDate(java.sql.Date date, java.sql.Date currDate) {
         return attendanceRepository.getByDate(date, currDate);
     }
+
+    @Override
+    public void saveAll(List<Attendance> attendances) {
+        attendanceRepository.saveAll(attendances);        
+    }
 }

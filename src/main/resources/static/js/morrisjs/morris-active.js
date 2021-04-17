@@ -40,8 +40,8 @@ function attStatusGraphData(data) {
         const dataEach = {
             "date"   : date,
             "Normal"    : attN,
-            "High" : attH,
-            "Low"   : attL
+            "Low" : attL,
+            "High"   : attH
         };
         gData.push(dataEach);
     }
@@ -105,7 +105,7 @@ function initAttendanceStatusGraph() {
         var gStatusData = attStatusGraphData(data);
         console.table(gStatusData);
 
-        const labelsStatus = ['Normal', 'High', 'Low'];
+        const labelsStatus = ['Normal', 'Low', 'High'];
         attStatusGraph = setMorisAreaChart(
             'morris-area-chart', 
             gStatusData, 
@@ -113,13 +113,13 @@ function initAttendanceStatusGraph() {
             labelsStatus,
             labelsStatus,
             0,
-            0.8,
-            ['green', 'red','yellow'],
+            0.6,
+            ['green','yellow', 'red'],
             true,
             '#e0e0e0',
             0,
             'auto',
-            ['green', 'red','yellow'],
+            ['green', 'yellow', 'red'],
             true
         );
     });
@@ -157,7 +157,8 @@ function refreshAttendanceStatusGraph() {
 }
 
 async function fetchlast30DaysAttendance() {
-    const response = await fetch('https://stars-smart-attendance.herokuapp.com/api/attendance/last30days');
+    // const response = await fetch('https://stars-smart-attendance.herokuapp.com/api/attendance/last30days');
+    const response = await fetch('http://localhost:8080/api/attendance/last30days');
     const attendance = await response.json();
     return attendance;
 }
