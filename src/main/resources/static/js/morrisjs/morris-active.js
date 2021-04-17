@@ -157,8 +157,8 @@ function refreshAttendanceStatusGraph() {
 }
 
 async function fetchlast30DaysAttendance() {
-    // const response = await fetch('https://stars-smart-attendance.herokuapp.com/api/attendance/last30days');
-    const response = await fetch('http://localhost:8080/api/attendance/last30days');
+    const response = await fetch('https://stars-smart-attendance.herokuapp.com/api/attendance/last30days');
+    // const response = await fetch('http://localhost:8080/api/attendance/last30days');
     const attendance = await response.json();
     return attendance;
 }
