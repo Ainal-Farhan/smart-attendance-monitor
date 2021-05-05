@@ -90,7 +90,7 @@ public class AttendanceRestController {
         
         return ResponseEntity
             .created(URI
-                    .create(String.format("/Attendance/%s", attendance.getDate.toString())))
+                    .create(String.format("/Attendance/%s", attendance.getDate().toString())))
                     .body(persistedAttendance);
 
     }
