@@ -79,6 +79,21 @@ public class AttendanceRestController {
         }
 
     }
+    
+    @PostMapping(
+        "/api/save/data",
+        consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+        produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Attendance> addAttendance(
+        @RequestBody Attendance attendance) {
+        Attendance persistedAttendance = attendanceService.save(attendance);
+        
+        return ResponseEntity
+            .created(URI
+                    .create(String.format("/Attendance/%s", attendance.getDate.toString())))
+                    .body(persistedAttendance);
+
+    }
 
     @GetMapping("/add/dummy-data")
     public List<Attendance> addDummyData() {
