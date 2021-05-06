@@ -95,7 +95,7 @@ public class AttendanceRestController {
 
     }
 
-    @GetMapping("api/deleteAllByDate")
+    @GetMapping("delete/deleteAllByDate")
     public String deleteAllByDate(@RequestParam(name = "date") String dateText) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
