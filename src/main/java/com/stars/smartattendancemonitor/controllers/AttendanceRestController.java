@@ -41,14 +41,14 @@ public class AttendanceRestController {
 
     @GetMapping("/api/attendance/last30days")
     public List<Attendance> getAttendanceFromLast30Days() {
-        java.util.Date date = new java.util.Date();
-        java.util.Date last30DaysDate = new java.util.Date(date.getTime() - 30 * 24 * 3600 * 1000l);
-        java.sql.Date sqlDate = new java.sql.Date(last30DaysDate.getTime());
-
         java.util.Date now = new java.util.Date();
-        java.sql.Date currSqlDate = new java.sql.Date(now.getTime());
+        java.util.Date last30DaysDate = new java.util.Date(now.getTime() - 30 * 24 * 3600 * 1000l);
+        java.util.Date nextOneDay = new java.util.Date(now.getTime() + 1 * 24 * 3600 * 1000l);
         
-        return attendanceService.getAttendanceFromSelectedDate(sqlDate, currSqlDate);
+        java.sql.Date sqllast30DaysDate = new java.sql.Date(last30DaysDate.getTime());
+        java.sql.Date sqlNextOneDayDate = new java.sql.Date(nextOneDay.getTime());
+
+        return attendanceService.getAttendanceFromSelectedDate(sqllast30DaysDate, sqlNextOneDayDate);
     }
 
     @GetMapping("/api/save/data")
