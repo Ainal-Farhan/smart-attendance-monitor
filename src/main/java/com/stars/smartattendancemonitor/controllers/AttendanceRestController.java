@@ -1,5 +1,6 @@
 package com.stars.smartattendancemonitor.controllers;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.Random;
 
 import com.stars.smartattendancemonitor.models.Attendance;
 import com.stars.smartattendancemonitor.service.AttendanceService;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,46 +54,44 @@ public class AttendanceRestController {
     @GetMapping("/api/save/data")
     public Attendance saveData(
         @RequestParam(name = "temp")    double temp,
-        @RequestParam(name = "status")  String status,
-        @RequestParam(name = "t")    String t,    // format: hh:mm:ss,    eg: 10:20:31 
-        @RequestParam(name = "d")    String d     // format: yyyy-mm-dd,  eg: 2011-12-31
+        @RequestParam(name = "status")  String status
+        // @RequestParam(name = "t")    String t,    // format: hh:mm:ss,    eg: 10:20:31 
+        // @RequestParam(name = "d")    String d     // format: yyyy-mm-dd,  eg: 2011-12-31
     ) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date date = sdf.parse(d);
-            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        java.util.Date now = new java.util.Date();
 
-            java.sql.Time sqlTime = java.sql.Time.valueOf(t);
+        Attendance attendance = new Attendance();
 
-            Attendance attendance = new Attendance();
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-            attendance.setTemperature(temp);
-            attendance.setStatus(status);
-            attendance.setTime(sqlTime);
-            attendance.setDate(sqlDate);
+        attendance.setTemperature(temp);
+        attendance.setStatus(status);
+        attendance.setTime(java.sql.Time.valueOf(dateFormat.format(now)));
+        attendance.setDate(new java.sql.Date(now.getTime()));
+
+        return attendanceService.save(attendance);
+
+        // try {
+        //     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        //     java.util.Date date = sdf.parse(d);
+        //     java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+
+        //     java.sql.Time sqlTime = java.sql.Time.valueOf(t);
+
+        //     Attendance attendance = new Attendance();
+
+        //     attendance.setTemperature(temp);
+        //     attendance.setStatus(status);
+        //     attendance.setTime(sqlTime);
+        //     attendance.setDate(sqlDate);
             
-            attendanceService.save(attendance);
-            return attendance;
-        }
-        catch (ParseException e) {
-            System.out.println(e);
-            return new Attendance();
-        }
-
-    }
-    
-    @PostMapping(
-        "/api/save/data",
-        consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-        produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Attendance> addAttendance(
-        @RequestBody Attendance attendance) {
-        Attendance persistedAttendance = attendanceService.save(attendance);
-        
-        return ResponseEntity
-            .created(URI
-                    .create(String.format("/Attendance/%s", attendance.getDate().toString())))
-                    .body(persistedAttendance);
+        //     attendanceService.save(attendance);
+        //     return attendance;
+        // }
+        // catch (ParseException e) {
+        //     System.out.println(e);
+        //     return new Attendance();
+        // }
 
     }
 

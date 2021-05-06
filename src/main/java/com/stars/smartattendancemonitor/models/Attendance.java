@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -24,9 +25,11 @@ public class Attendance {
     @Column(name = "status", nullable = false)
     private  String status;
     
+    @JsonFormat(pattern="HH:mm:ss")
     @Column(name = "time", nullable = false)
     private java.sql.Time time;
     
+    @JsonFormat(pattern="yyyy-MM-dd")
     @Column(name = "date", nullable = false)
     private java.sql.Date date;
 
