@@ -8,4 +8,5 @@ public interface AttendanceService {
     public Attendance save(Object attendance);
     public List<Attendance> getAttendanceFromSelectedDate(java.sql.Date date, java.sql.Date currDate);
     public void saveAll(List<Attendance> attendances);
+    public long deleteAllByDate(java.sql.Date date);
 }

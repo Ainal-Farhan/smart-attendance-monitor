@@ -95,6 +95,24 @@ public class AttendanceRestController {
 
     }
 
+    @GetMapping("api/deleteAllByDate")
+    public String deleteAllByDate(@RequestParam(name = "date") String dateText) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date date = sdf.parse(dateText);
+            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+            
+            long deletedData = attendanceService.deleteAllByDate(sqlDate);
+            return deletedData + " data deleted with date: " + dateText;
+        }
+        catch (ParseException e) {
+            System.out.println(e);
+            return "Failed to delete any data with date: " + dateText;
+        }
+    }
+
+
+
     @GetMapping("/add/dummy-data")
     public List<Attendance> addDummyData() {
         List<Attendance> attendances = new ArrayList<>();

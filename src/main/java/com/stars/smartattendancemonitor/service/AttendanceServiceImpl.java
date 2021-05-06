@@ -8,6 +8,7 @@ import com.stars.smartattendancemonitor.models.Attendance;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AttendanceServiceImpl implements AttendanceService{
@@ -27,5 +28,11 @@ public class AttendanceServiceImpl implements AttendanceService{
     @Override
     public void saveAll(List<Attendance> attendances) {
         attendanceRepository.saveAll(attendances);        
+    }
+
+    @Transactional
+    @Override
+    public long deleteAllByDate(java.sql.Date date) {
+        return attendanceRepository.deleteByDate(date);
     }
 }

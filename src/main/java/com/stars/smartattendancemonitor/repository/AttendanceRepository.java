@@ -16,4 +16,8 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     @Modifying
     @Query("SELECT a FROM Attendance a WHERE a.date >= :date AND a.date < :currDate ORDER BY a.date ASC")
     public List<Attendance> getByDate(@Param("date") java.sql.Date date, @Param("currDate") java.sql.Date currDate);
+
+    @Modifying
+    @Query("delete from Attendance a where a.date=:date")
+    public int deleteByDate(@Param("date") java.sql.Date date);
 }
